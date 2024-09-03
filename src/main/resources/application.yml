@@ -1,0 +1,35 @@
+application.name: book-reservation
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${PG_HOST:localhost}:${PG_PORT:15432}/${PG_DATABASE:book_reservation}
+    username: ${PG_USER:book_reservation}
+    password: ${PG_PASSWORD:123456}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: false
+    baseline-version: 1.0
+    baseline-on-migrate: true
+    validate-on-migrate: true
+    out-of-order: false
+    target: latest
+    locations: classpath:db/migration
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    default-schema: public
+  jackson:
+    default-property-inclusion: non_null
+
+sa-token:
+  token-name: Authorization
+  # token??
+  token-prefix: Bearer
+  # jwt ??
+  jwt-secret-key: ${JWT_SECRET_KEY:JzNuZP2nGuBgPtKe3A0rxuYhExezSghw}
+  # ?? Cookie ??
+  is-read-cookie: false
+  is-write-header: false

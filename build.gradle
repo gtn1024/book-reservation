@@ -1,0 +1,53 @@
+buildscript {
+    dependencies {
+        classpath 'org.flywaydb:flyway-database-postgresql:10.17.3'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.3'
+    id 'io.spring.dependency-management' version '1.1.6'
+
+    id 'org.flywaydb.flyway' version '10.17.3'
+    id 'io.freefair.lombok' version '8.10'
+}
+
+group = 'com.github.gtn1024'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.17.3'
+    implementation 'cn.dev33:sa-token-spring-boot3-starter:1.39.0'
+    implementation 'cn.dev33:sa-token-jwt:1.39.0'
+    implementation 'commons-codec:commons-codec:1.17.1'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
+}
+
+flyway {
+    def PG_HOST = System.getenv('PG_HOST') ?: 'localhost'
+    def PG_PORT = System.getenv('PG_PORT') ?: '15432'
+    def PG_DATABASE = System.getenv('PG_DATABASE') ?: 'book_reservation'
+    def PG_USER = System.getenv('PG_USER') ?: 'book_reservation'
+    def PG_PASSWORD = System.getenv('PG_PASSWORD') ?: '123456'
+
+    url = "jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DATABASE}"
+    user = PG_USER
+    password = PG_PASSWORD
+    schemas = ['public']
+}
