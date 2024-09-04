@@ -23,14 +23,14 @@ public abstract class BaseEntity {
     private LocalDateTime updatedAt;
 
     @PrePersist
-    private void prePersist() {
+    protected void prePersist() {
         LocalDateTime now = LocalDateTime.now();
         createdAt = now;
         updatedAt = now;
     }
 
     @PreUpdate
-    private void preUpdate() {
+    protected void preUpdate() {
         updatedAt = LocalDateTime.now();
     }
 }

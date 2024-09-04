@@ -26,10 +26,11 @@ spring:
 
 sa-token:
   token-name: Authorization
-  # token??
   token-prefix: Bearer
-  # jwt ??
   jwt-secret-key: ${JWT_SECRET_KEY:JzNuZP2nGuBgPtKe3A0rxuYhExezSghw}
-  # ?? Cookie ??
   is-read-cookie: false
   is-write-header: false
+
+server:
+  servlet:
+    context-path: /api/v1
