@@ -39,7 +39,7 @@ public class RestControllerExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Response> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         logger.error(e.getMessage(), e);
-        var msg = e.getFieldErrors().getFirst().getDefaultMessage();
+        var msg = e.getFieldErrors().getFirst().getDefaultMessage() + ": " + e.getFieldErrors().getFirst().getField();
         return Response.fail(msg, 400);
     }
 
@@ -47,17 +47,13 @@ public class RestControllerExceptionHandler {
     public ResponseEntity<Response> handleSaTokenException(SaTokenException e) {
         logger.error(e.getMessage(), e);
 
-        if (e instanceof NotLoginException) {
-            return Response.fail("未登录", 401);
-        }
-        if (e instanceof NotPermissionException) {
-            return Response.fail("无权限", 403);
-        }
-        if (e instanceof NotRoleException) {
-            return Response.fail("无权限", 403);
-        }
+        return switch (e) {
+            case NotLoginException ignored -> Response.fail("未登录", 401);
+            case NotPermissionException ignored -> Response.fail("无权限", 403);
+            case NotRoleException ignored -> Response.fail("无权限", 403);
+            default -> Response.fail(e.getMessage() != null ? e.getMessage() : "Unauthorized", 400);
+        };
 
-        return Response.fail(e.getMessage() != null ? e.getMessage() : "Unauthorized", 400);
     }
 
     @ExceptionHandler(Exception.class)
