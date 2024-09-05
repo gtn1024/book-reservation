@@ -32,6 +32,8 @@ public class Book extends BaseEntity {
     @Column(nullable = false)
     private Integer quantity;
 
+    private String cover;
+
     @Override
     protected void prePersist() {
         super.prePersist();
