@@ -1,6 +1,5 @@
 package com.github.gtn1024.bookreservation.service;
 
-import cn.hutool.core.util.RandomUtil;
 import com.github.gtn1024.bookreservation.entity.ReservationCard;
 import com.github.gtn1024.bookreservation.entity.User;
 import com.github.gtn1024.bookreservation.repository.ReservationCardRepository;
@@ -40,6 +39,10 @@ public class ReservationCardService {
         reservationCard.setCardNumber(cardNumber);
 
         return reservationCardRepository.save(reservationCard);
+    }
+
+    public ReservationCard getReservationCardByUser(User user) {
+        return reservationCardRepository.findByUser(user).orElse(null);
     }
 
     private String generateCardNumber() {

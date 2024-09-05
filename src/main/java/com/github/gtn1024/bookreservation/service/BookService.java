@@ -65,4 +65,8 @@ public class BookService {
         book.setQuantity(quantity);
         bookRepository.save(book);
     }
+
+    public Integer getBookAvailableQuantity(Book book) {
+        return 0;
+    }
 }
