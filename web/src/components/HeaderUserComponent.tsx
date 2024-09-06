@@ -38,9 +38,11 @@ export function HeaderUserComponent() {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>
-          <User className="mr-2 size-4" />
-          <span>用户中心</span>
+        <DropdownMenuItem asChild>
+          <Link to="/me">
+            <User className="mr-2 size-4" />
+            <span>用户中心</span>
+          </Link>
         </DropdownMenuItem>
         {auth.user?.userRole === 'ADMIN' && (
           <>

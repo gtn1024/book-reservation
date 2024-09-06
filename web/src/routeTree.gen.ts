@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as MeImport } from './routes/me'
 import { Route as ManageImport } from './routes/manage'
 import { Route as LoginImport } from './routes/login'
 import { Route as R404Import } from './routes/404'
@@ -23,6 +24,11 @@ import { Route as ManageBooksCreateImport } from './routes/manage/books/create'
 import { Route as ManageBooksIdImport } from './routes/manage/books/$id'
 
 // Create/Update Routes
+
+const MeRoute = MeImport.update({
+  path: '/me',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const ManageRoute = ManageImport.update({
   path: '/manage',
@@ -106,6 +112,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManageImport
       parentRoute: typeof rootRoute
     }
+    '/me': {
+      id: '/me'
+      path: '/me'
+      fullPath: '/me'
+      preLoaderRoute: typeof MeImport
+      parentRoute: typeof rootRoute
+    }
     '/books/$id': {
       id: '/books/$id'
       path: '/books/$id'
@@ -163,6 +176,7 @@ export const routeTree = rootRoute.addChildren({
     ManageBooksCreateRoute,
     ManageBooksIndexRoute,
   }),
+  MeRoute,
   BooksIdRoute,
   BooksIndexRoute,
 })
@@ -179,6 +193,7 @@ export const routeTree = rootRoute.addChildren({
         "/404",
         "/login",
         "/manage",
+        "/me",
         "/books/$id",
         "/books/"
       ]
@@ -200,6 +215,9 @@ export const routeTree = rootRoute.addChildren({
         "/manage/books/create",
         "/manage/books/"
       ]
+    },
+    "/me": {
+      "filePath": "me.tsx"
     },
     "/books/$id": {
       "filePath": "books/$id.tsx"
