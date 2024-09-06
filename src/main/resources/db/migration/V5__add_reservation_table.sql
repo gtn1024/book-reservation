@@ -6,6 +6,7 @@ CREATE TABLE reservations
     book_id    UUID                        NOT NULL,
     user_id    UUID                        NOT NULL,
     start_date date                        NOT NULL,
+    end_date   date                        NOT NULL,
     CONSTRAINT pk_reservations PRIMARY KEY (id)
 );
 

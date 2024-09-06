@@ -10,6 +10,8 @@ public record BookRequest(
         @NotBlank String author,
         @NotBlank String publisher,
         @NotNull Integer year,
-        @NotNull @Min(0) Integer quantity
+        @NotNull @Min(0) Integer quantity,
+        @NotBlank String description,
+        String cover
 ) {
 }

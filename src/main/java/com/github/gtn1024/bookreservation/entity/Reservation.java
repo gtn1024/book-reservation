@@ -28,6 +28,6 @@ public class Reservation extends BaseEntity {
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 }

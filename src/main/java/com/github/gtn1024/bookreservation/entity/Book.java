@@ -32,6 +32,9 @@ public class Book extends BaseEntity {
     @Column(nullable = false)
     private Integer quantity;
 
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String description;
+
     private String cover;
 
     @Override

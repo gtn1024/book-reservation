@@ -2,9 +2,12 @@ package com.github.gtn1024.bookreservation.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.stp.StpUtil;
+import com.github.gtn1024.bookreservation.entity.Reservation;
+import com.github.gtn1024.bookreservation.entity.User;
 import com.github.gtn1024.bookreservation.model.Response;
 import com.github.gtn1024.bookreservation.model.request.BookReserveRequest;
 import com.github.gtn1024.bookreservation.service.ReservationService;
+import com.github.gtn1024.bookreservation.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +17,11 @@ import java.util.UUID;
 @RequestMapping("/reservations")
 public class ReservationController {
     private final ReservationService reservationService;
+    private final UserService userService;
 
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService, UserService userService) {
         this.reservationService = reservationService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -31,8 +36,9 @@ public class ReservationController {
     @SaCheckRole("USER")
     public ResponseEntity<Response> show(@PathVariable UUID id) {
         UUID userId = UUID.fromString(StpUtil.getLoginIdAsString());
+        Reservation reservation = reservationService.getReservationById(userId, id);
 
-        return Response.success(null, null);
+        return Response.success(reservation, null);
     }
 
     @PostMapping("reserve")

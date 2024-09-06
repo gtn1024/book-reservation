@@ -4,6 +4,7 @@ import com.github.gtn1024.bookreservation.entity.Book;
 import com.github.gtn1024.bookreservation.entity.Reservation;
 import com.github.gtn1024.bookreservation.entity.ReservationCard;
 import com.github.gtn1024.bookreservation.entity.User;
+import com.github.gtn1024.bookreservation.exception.NotFoundException;
 import com.github.gtn1024.bookreservation.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,5 +66,14 @@ public class ReservationService {
         // 7. 入库
         Reservation reservation = new Reservation(book, user, startDate, endDate);
         reservationRepository.save(reservation);
+    }
+
+    public Reservation getReservationById(UUID userId, UUID id) {
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new NotFoundException("预约不存在"));
+        if (!reservation.getUser().getId().equals(userId)) {
+            throw new NotFoundException("预约不存在");
+        }
+
+        return reservation;
     }
 }
