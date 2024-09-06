@@ -52,6 +52,10 @@ public class BookService {
         return bookRepository.findAll(spec, pageRequest);
     }
 
+    public List<Book> homepageGetNewBooks() {
+        return bookRepository.findAll(PageRequest.of(0, 10, Sort.by(Sort.Order.desc("createdAt")))).getContent();
+    }
+
     public Integer countBooks(String title, String author, String publisher, Integer year) {
         return bookRepository.countByTitleLikeAndAuthorLikeAndPublisherLikeAndYear(title, author, publisher, year);
     }

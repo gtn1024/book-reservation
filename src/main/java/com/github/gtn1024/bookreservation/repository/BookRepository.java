@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface BookRepository extends JpaRepository<Book, UUID>, JpaSpecificationExecutor<Book> {
-    List<Book> findByTitleLikeAndAuthorLikeAndPublisherLikeAndYear(String title, String author, String publisher, Integer year,  Pageable pageable);
-
     Integer countByTitleLikeAndAuthorLikeAndPublisherLikeAndYear(String title, String author, String publisher, Integer year);
+
+
 }
