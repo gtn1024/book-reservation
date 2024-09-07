@@ -177,7 +177,7 @@ function ReserveBooks() {
                         }}
                         onSelect={field.onChange}
                         numberOfMonths={2}
-                        disabled={date => date < new Date()}
+                        disabled={date => date < new Date(Date.now() - 86400000)}
                       />
                     </PopoverContent>
                   </Popover>

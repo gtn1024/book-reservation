@@ -55,7 +55,7 @@ const DataTable: React.FC<DataTableProps> = ({ reservations, pagination }) => {
                 {reservation.book.title}
               </Link>
             </TableCell>
-            <TableCell className="border">{format(reservation.createdAt, 'yyyy-MM-dd hh:mm:ss')}</TableCell>
+            <TableCell className="border">{format(reservation.createdAt, 'yyyy-MM-dd HH:mm:ss')}</TableCell>
             <TableCell className="border">{reservation.startDate}</TableCell>
             <TableCell className="border">{reservation.endDate}</TableCell>
             <TableCell className="border">{getReservationStatus(reservation)}</TableCell>
