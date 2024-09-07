@@ -11,6 +11,8 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ReservationsImport } from './routes/reservations'
+import { Route as RegisterImport } from './routes/register'
 import { Route as MeImport } from './routes/me'
 import { Route as ManageImport } from './routes/manage'
 import { Route as LoginImport } from './routes/login'
@@ -18,12 +20,23 @@ import { Route as R404Import } from './routes/404'
 import { Route as IndexImport } from './routes/index'
 import { Route as ManageIndexImport } from './routes/manage/index'
 import { Route as BooksIndexImport } from './routes/books/index'
-import { Route as BooksIdImport } from './routes/books/$id'
 import { Route as ManageBooksIndexImport } from './routes/manage/books/index'
+import { Route as BooksIdIndexImport } from './routes/books/$id/index'
 import { Route as ManageBooksCreateImport } from './routes/manage/books/create'
 import { Route as ManageBooksIdImport } from './routes/manage/books/$id'
+import { Route as BooksIdReserveImport } from './routes/books/$id/reserve'
 
 // Create/Update Routes
+
+const ReservationsRoute = ReservationsImport.update({
+  path: '/reservations',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RegisterRoute = RegisterImport.update({
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const MeRoute = MeImport.update({
   path: '/me',
@@ -60,14 +73,14 @@ const BooksIndexRoute = BooksIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const BooksIdRoute = BooksIdImport.update({
-  path: '/books/$id',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const ManageBooksIndexRoute = ManageBooksIndexImport.update({
   path: '/books/',
   getParentRoute: () => ManageRoute,
+} as any)
+
+const BooksIdIndexRoute = BooksIdIndexImport.update({
+  path: '/books/$id/',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const ManageBooksCreateRoute = ManageBooksCreateImport.update({
@@ -78,6 +91,11 @@ const ManageBooksCreateRoute = ManageBooksCreateImport.update({
 const ManageBooksIdRoute = ManageBooksIdImport.update({
   path: '/books/$id',
   getParentRoute: () => ManageRoute,
+} as any)
+
+const BooksIdReserveRoute = BooksIdReserveImport.update({
+  path: '/books/$id/reserve',
+  getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -119,11 +137,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeImport
       parentRoute: typeof rootRoute
     }
-    '/books/$id': {
-      id: '/books/$id'
-      path: '/books/$id'
-      fullPath: '/books/$id'
-      preLoaderRoute: typeof BooksIdImport
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterImport
+      parentRoute: typeof rootRoute
+    }
+    '/reservations': {
+      id: '/reservations'
+      path: '/reservations'
+      fullPath: '/reservations'
+      preLoaderRoute: typeof ReservationsImport
       parentRoute: typeof rootRoute
     }
     '/books/': {
@@ -140,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManageIndexImport
       parentRoute: typeof ManageImport
     }
+    '/books/$id/reserve': {
+      id: '/books/$id/reserve'
+      path: '/books/$id/reserve'
+      fullPath: '/books/$id/reserve'
+      preLoaderRoute: typeof BooksIdReserveImport
+      parentRoute: typeof rootRoute
+    }
     '/manage/books/$id': {
       id: '/manage/books/$id'
       path: '/books/$id'
@@ -153,6 +185,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/manage/books/create'
       preLoaderRoute: typeof ManageBooksCreateImport
       parentRoute: typeof ManageImport
+    }
+    '/books/$id/': {
+      id: '/books/$id/'
+      path: '/books/$id'
+      fullPath: '/books/$id'
+      preLoaderRoute: typeof BooksIdIndexImport
+      parentRoute: typeof rootRoute
     }
     '/manage/books/': {
       id: '/manage/books/'
@@ -177,8 +216,11 @@ export const routeTree = rootRoute.addChildren({
     ManageBooksIndexRoute,
   }),
   MeRoute,
-  BooksIdRoute,
+  RegisterRoute,
+  ReservationsRoute,
   BooksIndexRoute,
+  BooksIdReserveRoute,
+  BooksIdIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -194,8 +236,11 @@ export const routeTree = rootRoute.addChildren({
         "/login",
         "/manage",
         "/me",
-        "/books/$id",
-        "/books/"
+        "/register",
+        "/reservations",
+        "/books/",
+        "/books/$id/reserve",
+        "/books/$id/"
       ]
     },
     "/": {
@@ -219,8 +264,11 @@ export const routeTree = rootRoute.addChildren({
     "/me": {
       "filePath": "me.tsx"
     },
-    "/books/$id": {
-      "filePath": "books/$id.tsx"
+    "/register": {
+      "filePath": "register.tsx"
+    },
+    "/reservations": {
+      "filePath": "reservations.tsx"
     },
     "/books/": {
       "filePath": "books/index.tsx"
@@ -229,6 +277,9 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "manage/index.tsx",
       "parent": "/manage"
     },
+    "/books/$id/reserve": {
+      "filePath": "books/$id/reserve.tsx"
+    },
     "/manage/books/$id": {
       "filePath": "manage/books/$id.tsx",
       "parent": "/manage"
@@ -236,6 +287,9 @@ export const routeTree = rootRoute.addChildren({
     "/manage/books/create": {
       "filePath": "manage/books/create.tsx",
       "parent": "/manage"
+    },
+    "/books/$id/": {
+      "filePath": "books/$id/index.tsx"
     },
     "/manage/books/": {
       "filePath": "manage/books/index.tsx",

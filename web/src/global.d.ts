@@ -25,3 +25,11 @@ interface Book {
   cover?: string
   createdAt: string
 }
+
+interface Reservation {
+  id: string
+  book: Book
+  user: CurrentUser
+  startDate: string
+  endDate: string
+}

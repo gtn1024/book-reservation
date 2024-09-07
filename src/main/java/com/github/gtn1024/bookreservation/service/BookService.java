@@ -3,6 +3,7 @@ package com.github.gtn1024.bookreservation.service;
 import com.github.gtn1024.bookreservation.entity.Book;
 import com.github.gtn1024.bookreservation.exception.NotFoundException;
 import com.github.gtn1024.bookreservation.repository.BookRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -17,6 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -25,8 +27,11 @@ import java.util.UUID;
 public class BookService {
     private final BookRepository bookRepository;
 
-    public BookService(BookRepository bookRepository) {
+    private final EntityManager entityManager;
+
+    public BookService(BookRepository bookRepository, EntityManager entityManager) {
         this.bookRepository = bookRepository;
+        this.entityManager = entityManager;
     }
 
     public Page<Book> getBooks(String title, String author, String publisher, Integer year, Integer page, Integer size) {
@@ -120,6 +125,18 @@ public class BookService {
     }
 
     public Integer getBookAvailableQuantity(Book book) {
-        return 0;
+        // quality - 目前已经外借的书
+        // 外借的书是指，当前时间在 createdAt 和 endDate 之间的预约
+        String sql = """
+                SELECT COUNT(*)
+                FROM reservations
+                WHERE book_id = :bookId
+                AND :now BETWEEN created_at AND end_date
+                """;
+        Long borrowed = (Long) entityManager.createNativeQuery(sql)
+                .setParameter("bookId", book.getId())
+                .setParameter("now", LocalDateTime.now())
+                .getSingleResult();
+        return book.getQuantity() - borrowed.intValue();
     }
 }

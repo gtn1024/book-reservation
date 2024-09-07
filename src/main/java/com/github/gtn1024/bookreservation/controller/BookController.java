@@ -2,6 +2,7 @@ package com.github.gtn1024.bookreservation.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.github.gtn1024.bookreservation.entity.Book;
+import com.github.gtn1024.bookreservation.exception.NotFoundException;
 import com.github.gtn1024.bookreservation.model.Pagination;
 import com.github.gtn1024.bookreservation.model.Response;
 import com.github.gtn1024.bookreservation.model.request.BookRequest;
@@ -40,6 +41,16 @@ public class BookController {
     public ResponseEntity<Response> show(@PathVariable UUID id) {
         Book book = bookService.getBookById(id);
         return Response.success(book, null);
+    }
+
+    @GetMapping("{id}/availableCount")
+    public ResponseEntity<Response> getAvailableCount(@PathVariable UUID id) {
+        Book book = bookService.getBookById(id);
+        if (book == null) {
+            throw new NotFoundException("Book not found");
+        }
+        int count = bookService.getBookAvailableQuantity(book);
+        return Response.success(count, null);
     }
 
     @PostMapping

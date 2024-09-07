@@ -10,38 +10,42 @@ import { Button } from '@/components/ui/button.tsx'
 import { cn, setHeaderTitle } from '@/lib/utils.ts'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form.tsx'
 import { useAuth } from '@/auth.tsx'
+import { http } from '@/lib/http.ts'
 
-const loginPageSearchSchema = z.object({
-  redirect: z.string().optional(),
+export const Route = createFileRoute('/register')({
+  component: RegisterPage,
 })
 
-type LoginPageSearch = z.infer<typeof loginPageSearchSchema>
-
-export const Route = createFileRoute('/login')({
-  component: LoginPage,
-  validateSearch: loginPageSearchSchema,
-})
-
-const loginFormSchema = z.object({
+const registerFormSchema = z.object({
   username: z.string(),
   password: z.string(),
+  password2: z.string(),
 })
 
-function LoginForm({ redirect }: { redirect?: string }) {
+function RegisterForm({ redirect }: { redirect?: string }) {
   const auth = useAuth()
   const nav = useNavigate()
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const form = useForm<z.infer<typeof registerFormSchema>>({
+    resolver: zodResolver(registerFormSchema),
   })
 
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    auth.login({ password: values.password, type: 'USERNAME', username: values.username })
-      .then(() => {
-        if (redirect) {
-          return nav({ to: redirect })
-        }
-        return nav({ to: '/' })
-      })
+  function onSubmit(values: z.infer<typeof registerFormSchema>) {
+    if (values.password !== values.password2) {
+      return form.setError('password2', { message: '两次密码不一致' })
+    }
+
+    http.post('/auth/register', {
+      username: values.username,
+      password: values.password,
+    }).then(() => {
+      auth.login({ password: values.password, type: 'USERNAME', username: values.username })
+        .then(() => {
+          if (redirect) {
+            return nav({ to: redirect })
+          }
+          return nav({ to: '/' })
+        })
+    })
   }
 
   return (
@@ -83,6 +87,22 @@ function LoginForm({ redirect }: { redirect?: string }) {
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="password2"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  确认密码
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} type="password" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <Button type="submit">提交</Button>
         </form>
       </Form>
@@ -90,24 +110,23 @@ function LoginForm({ redirect }: { redirect?: string }) {
   )
 }
 
-function LoginPage() {
+function RegisterPage() {
   useEffect(() => {
-    setHeaderTitle('登录')
+    setHeaderTitle('注册')
   }, [])
-  const { redirect } = Route.useSearch()
   return (
     <div className="flex h-[80vh] items-center justify-center">
       <Card className="w-[400px]">
         <CardHeader>
-          <CardTitle>登录</CardTitle>
+          <CardTitle>注册</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col space-y-2">
-            <LoginForm redirect={redirect} />
+            <RegisterForm />
           </div>
           <div className="mt-2 flex items-center justify-center">
-            <Link to="/register" className="text-link">
-              注册
+            <Link to="/login" className="text-link">
+              登录
             </Link>
           </div>
         </CardContent>

@@ -6,6 +6,9 @@ import com.github.gtn1024.bookreservation.entity.ReservationCard;
 import com.github.gtn1024.bookreservation.entity.User;
 import com.github.gtn1024.bookreservation.exception.NotFoundException;
 import com.github.gtn1024.bookreservation.repository.ReservationRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,5 +78,32 @@ public class ReservationService {
         }
 
         return reservation;
+    }
+
+    public boolean canReserveBook(UUID userId, UUID bookId) {
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            return false;
+        }
+
+        Book book = bookService.getBookById(bookId);
+        if (book == null) {
+            return false;
+        }
+
+        if (bookService.getBookAvailableQuantity(book) <= 0) {
+            return false;
+        }
+
+        return reservationRepository.findByUserAndBookAndCreatedAtAfter(user, book, LocalDate.now().atStartOfDay()).isEmpty();
+    }
+
+    public Page<Reservation> getReservationsByUser(UUID userId, Integer page, Integer size) {
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            throw new NotFoundException("用户不存在");
+        }
+
+        return reservationRepository.findByUser(user, PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createdAt"))));
     }
 }

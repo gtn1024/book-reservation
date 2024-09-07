@@ -99,7 +99,7 @@ function Index() {
   })
 
   const { data } = useSWRImmutable(`/books?${buildQueryParam(params)}`, async (path) => {
-    const res = await http.get<unknown[]>(path)
+    const res = await http.get<Book[]>(path)
       .then(res => res.data)
     setPagination(res.pagination!)
     return res
@@ -139,15 +139,15 @@ function Index() {
         currentPage={pagination.current}
         pageSize={pagination.pageSize}
         total={pagination.total}
-        onPageChange={page => navToPage(page)}
+        onPageChange={page => setPagination({ ...pagination, current: page })}
         onPrevClick={() => {
           if (pagination.current > 1) {
-            navToPage(pagination.current - 1)
+            setPagination({ ...pagination, current: pagination.current - 1 })
           }
         }}
         onNextClick={() => {
           if (pagination.current < pagination.pages) {
-            navToPage(pagination.current + 1)
+            setPagination({ ...pagination, current: pagination.current + 1 })
           }
         }}
       />

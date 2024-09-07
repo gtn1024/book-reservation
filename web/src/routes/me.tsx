@@ -70,13 +70,13 @@ function Me() {
                 </button>
               </div>
             )}
-            { got && (
+            {got && (
               <div className="flex h-full items-center justify-center" onClick={toggle}>
-                <div className="text-2xl font-bold text-black text-primary-foreground">
-                  { value ? card : '*************' }
+                <div className="text-2xl font-bold text-black">
+                  {value ? card : '*************'}
                 </div>
               </div>
-            ) }
+            )}
           </div>
         </div>
       </div>

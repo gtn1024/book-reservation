@@ -44,6 +44,12 @@ export function HeaderUserComponent() {
             <span>用户中心</span>
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/reservations">
+            <User className="mr-2 size-4" />
+            <span>借阅记录</span>
+          </Link>
+        </DropdownMenuItem>
         {auth.user?.userRole === 'ADMIN' && (
           <>
             <DropdownMenuSeparator />
