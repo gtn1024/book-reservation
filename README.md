@@ -15,3 +15,14 @@ docker run -d \
    -p 15432:5432 \
    postgres:16
 ```
+
+## 开发文档
+
+```shell
+# 数据库迁移
+./gradlew flywayMigrate
+# 后端运行
+./gradlew bootRun
+# 前端运行（web目录）
+pnpm dev
+```
